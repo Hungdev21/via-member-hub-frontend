@@ -1,0 +1,36 @@
+[
+  {
+    "id": 1,
+    "day": "7",
+    "month": "MAY",
+    "title": "The Sentry C",
+    "time": "06:00 PM - 09:30 PM WIB",
+    "price": 10,
+    "location": "The Sentry C",
+    "address": "15 Le Thanh Ton, Ben Nghe Ward, District 1, Ho Chi Minh City 70000, Vietnam",
+    "mapUrl": "https://www.google.com/maps/place/The+Sentry+C/@10.7804223,106.7028271,17z/data=!3m1!4b1!4m6!3m5!1s0x31752f1738d93d85:0xf4acea98a3102d2d!8m2!3d10.780417!4d106.7054074!16s%2Fg%2F11q8dz_x_2?entry=ttu&g_ep=EgoyMDI1MDUyOC4wIKXMDSoASAFQAw%3D%3D",
+    "mapImage": "https://thesentry.com.vn/wp-content/uploads/2022/12/GBA-6.jpg",
+    "organizer": "Duoc",
+    "description": "Meet and connect with the Vietnamese travel enthusiast community",
+    "maxParticipants": 50,
+    "currentParticipants": 25,
+    "status": "open"
+  },
+  {
+    "id": 2,
+    "day": "15",    
+    "month": "MAY",
+    "title": "Landmark 81",
+    "time": "02:00 PM - 05:00 PM WIB",
+    "price": 15,
+    "location": "Landmark 81",
+    "address": "720A Dien Bien Phu Street, Vinhomes Central Park, Binh Thanh District, Ho Chi Minh City 72300, Vietnam",
+    "mapUrl": "https://www.google.com/maps/place/Landmark+81/@10.7951171,106.7172304,17z/data=!3m1!4b1!4m6!3m5!1s0x317527c2f8f30911:0x36ac5073f8c91acd!8m2!3d10.7951119!4d106.722096!16s%2Fm%2F012hcpml?entry=ttu&g_ep=EgoyMDI1MDUyOC4wIKXMDSoASAFQAw%3D%3D",
+    "mapImage": "https://bizweb.dktcdn.net/100/414/214/products/toan-thap.jpg?v=1676254526307",
+    "organizer": "Lan Anh",
+    "description": "Popular tourist attraction",
+    "maxParticipants": 30,
+    "currentParticipants": 15,
+    "status": "open"
+  }
+]
