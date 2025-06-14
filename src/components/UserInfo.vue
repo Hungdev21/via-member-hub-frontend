@@ -95,11 +95,12 @@ export default {
       // const token = tokenResponse.headers.get('Authorization');
 
       // Gọi API với token
-      const response = await fetch(`${baseURL}/users/1`, {
-        // headers: {
-        //   'Authorization': token
-        // }
-      });
+      // const response = await fetch(`${baseURL}/users/1`, {
+      //   // headers: {
+      //   //   'Authorization': token
+      //   // }
+      // });
+      const response = await fetch(`${baseURL}/users/1`);
       if (!response.ok) {
         throw new Error(`HTTP error! Status : ${response.status}`);
       }

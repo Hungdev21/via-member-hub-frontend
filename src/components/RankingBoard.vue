@@ -118,12 +118,15 @@ onMounted(async () => {
     // const tokenData = await tokenResponse.json();
     // const token = tokenResponse.headers.get('Authorization');
 
-    // Gọi API với token
-    const response = await fetch(`${API_BASE_URL}/users/alluser`, {
-      // headers: {
-      //   'Authorization': token
-      // }
-    }); if (!response.ok) throw new Error('Không thể tải dữ liệu.');
+    // Gọi API với token await fetch(`${BASE_URL}/events`)
+    // const response = await fetch(`${API_BASE_URL}/users/alluser`, {
+    //   // headers: {
+    //   //   'Authorization': token
+    //   // }
+    // }); if (!response.ok) throw new Error('Không thể tải dữ liệu.');
+    // const result = await response.json();
+    const response = await fetch(`${API_BASE_URL}/users/alluser`); 
+    if (!response.ok) throw new Error('Không thể tải dữ liệu.');
     const result = await response.json();
 
     if (result.data) {
