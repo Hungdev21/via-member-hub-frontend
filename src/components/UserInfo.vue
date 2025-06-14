@@ -85,7 +85,7 @@ export default {
 
   async created() {
     const userID = this.$route.params.id;
-    const baseURL = import.meta.env.VITE_API_BASE_URL;
+    const baseURL = import.meta.env.VITE_API_URL;
 
     try {
       // const tokenResponse = await fetch(`${baseURL}/api/token/gettoken`);
