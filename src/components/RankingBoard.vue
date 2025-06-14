@@ -119,7 +119,7 @@ onMounted(async () => {
     // const token = tokenResponse.headers.get('Authorization');
 
     // Gọi API với token
-    const response = await fetch(`${API_BASE_URL}/api/users/alluser`, {
+    const response = await fetch(`${API_BASE_URL}/users/alluser`, {
       // headers: {
       //   'Authorization': token
       // }
