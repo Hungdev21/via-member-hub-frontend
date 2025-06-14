@@ -132,7 +132,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 onMounted(async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/users/alluser`);
+    const response = await fetch(`${API_BASE_URL}/users/alluser`);
     if (!response.ok) throw new Error('Không thể tải dữ liệu.');
     const result = await response.json();
 
