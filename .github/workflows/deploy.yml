@@ -1,4 +1,4 @@
-name: Deploy Vue App to Cloudflare Pages
+name: Build Vue App and Notify
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: self-hosted  # Windows runner
     defaults:
       run:
@@ -31,14 +31,6 @@ jobs:
       - name: Build Vue app
         run: npm run build
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: via-member-hub-frontend
-          directory: ./dist  # <-- Sửa nếu build ra dist ở root
-
       - name: Send Slack message
         if: success()
         env:
@@ -51,7 +43,7 @@ jobs:
           $commitUrl = "https://github.com/$repo/commit/$commitHash"
 
           $message = @{
-            text = "✅ Build passed and deployed.`nBy: $actor`nRepo: $repo`nMessage: $commitMsg`nCommit: $commitUrl"
+            text = "✅ Build passed successfully.`nBy: $actor`nRepo: $repo`nMessage: $commitMsg`nCommit: $commitUrl"
           } | ConvertTo-Json -Compress
 
           Write-Host "Sending message to Slack..."
