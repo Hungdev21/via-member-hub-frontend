@@ -23,16 +23,13 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./frontend
 
       - name: Create .env file from GitHub Secrets
         run: |
           Set-Content -Path .env -Value "VITE_API_URL=${{ secrets.VITE_API_URL }}"
-        working-directory: ./frontend
 
       - name: Build Vue app
         run: npm run build
-        working-directory: ./frontend
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
@@ -40,7 +37,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: via-member-hub-frontend
-          directory: ./frontend/dist
+          directory: ./dist  # <-- Sửa nếu build ra dist ở root
 
       - name: Send Slack message
         if: success()
@@ -59,4 +56,3 @@ jobs:
 
           Write-Host "Sending message to Slack..."
           Invoke-RestMethod -Uri $env:SLACK_WEBHOOK_URL -Method Post -Body $message -ContentType 'application/json'
-
