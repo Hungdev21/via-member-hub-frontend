@@ -1,0 +1,61 @@
+name: Deploy Vue App to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted  # Windows runner
+    defaults:
+      run:
+        shell: powershell
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./frontend
+
+      - name: Create .env file from GitHub Secrets
+        run: |
+          Set-Content -Path .env -Value "VITE_API_URL=${{ secrets.VITE_API_URL }}"
+        working-directory: ./frontend
+
+      - name: Build Vue app
+        run: npm run build
+        working-directory: ./frontend
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: via-member-hub-frontend
+          directory: ./frontend/dist
+
+      - name: Send Slack message
+        if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          $actor = "${{ github.actor }}"
+          $repo = "${{ github.repository }}"
+          $commitMsg = "${{ github.event.head_commit.message }}"
+          $commitHash = "${{ github.event.head_commit.id }}"
+          $commitUrl = "https://github.com/$repo/commit/$commitHash"
+
+          $message = @{
+            text = "✅ Build passed and deployed.`nBy: $actor`nRepo: $repo`nMessage: $commitMsg`nCommit: $commitUrl"
+          } | ConvertTo-Json -Compress
+
+          Write-Host "Sending message to Slack..."
+          Invoke-RestMethod -Uri $env:SLACK_WEBHOOK_URL -Method Post -Body $message -ContentType 'application/json'
