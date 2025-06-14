@@ -43,7 +43,7 @@ jobs:
           $commitUrl = "https://github.com/$repo/commit/$commitHash"
 
           $message = @{
-            text = "✅ Build passed successfully.`nBy: $actor`nRepo: $repo`nMessage: $commitMsg`nCommit: $commitUrl"
+            text = "Build passed successfully.`nBy: $actor`nRepo: $repo`nMessage: $commitMsg`nCommit: $commitUrl"
           } | ConvertTo-Json -Compress
 
           Write-Host "Sending message to Slack..."
