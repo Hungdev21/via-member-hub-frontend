@@ -88,17 +88,17 @@ export default {
     const baseURL = import.meta.env.VITE_API_BASE_URL;
 
     try {
-      const tokenResponse = await fetch(`${baseURL}/api/token/gettoken`);
-      if (!tokenResponse.ok) {
-        throw new Error('Không thể lấy token');
-      }
-      const token = tokenResponse.headers.get('Authorization');
+      // const tokenResponse = await fetch(`${baseURL}/api/token/gettoken`);
+      // if (!tokenResponse.ok) {
+      //   throw new Error('Không thể lấy token');
+      // }
+      // const token = tokenResponse.headers.get('Authorization');
 
       // Gọi API với token
       const response = await fetch(`${baseURL}/api/users/${userID}`, {
-        headers: {
-          'Authorization': token
-        }
+        // headers: {
+        //   'Authorization': token
+        // }
       });
       if (!response.ok) {
         throw new Error(`HTTP error! Status : ${response.status}`);

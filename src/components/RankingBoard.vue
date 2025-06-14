@@ -113,16 +113,16 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 onMounted(async () => {
   try {
     // Lấy token trướcAdd commentMore actions
-    const tokenResponse = await fetch(`${API_BASE_URL}/api/token/gettoken`);
-    if (!tokenResponse.ok) throw new Error('Không thể lấy token');
-    const tokenData = await tokenResponse.json();
-    const token = tokenResponse.headers.get('Authorization');
+    // const tokenResponse = await fetch(`${API_BASE_URL}/api/token/gettoken`);
+    // if (!tokenResponse.ok) throw new Error('Không thể lấy token');
+    // const tokenData = await tokenResponse.json();
+    // const token = tokenResponse.headers.get('Authorization');
 
     // Gọi API với token
     const response = await fetch(`${API_BASE_URL}/api/users/alluser`, {
-      headers: {
-        'Authorization': token
-      }
+      // headers: {
+      //   'Authorization': token
+      // }
     }); if (!response.ok) throw new Error('Không thể tải dữ liệu.');
     const result = await response.json();
 
