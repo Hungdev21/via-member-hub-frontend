@@ -98,7 +98,7 @@ export default {
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
   try {
-    const response = await fetch(`${baseURL}/api/users/${userID}`);
+    const response = await fetch(`${baseURL}/users/${userID}`);
     if (!response.ok) {
       throw new Error(`HTTP error! Status : ${response.status}`);
     }
