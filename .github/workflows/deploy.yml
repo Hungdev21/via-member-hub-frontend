@@ -59,3 +59,4 @@ jobs:
 
           Write-Host "Sending message to Slack..."
           Invoke-RestMethod -Uri $env:SLACK_WEBHOOK_URL -Method Post -Body $message -ContentType 'application/json'
+
