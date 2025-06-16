@@ -94,7 +94,7 @@ export default {
       return new Date(dateStr).toLocaleDateString('vi-VN', { month: 'short' });
     },
     goToDetail(id) {
-      this.$router.push(`api/event/${id}`);
+      this.$router.push(`api/events/${id}`);
     },
   },
 };
