@@ -1,0 +1,80 @@
+[
+  {
+    "memberID": "001",
+    "name": "Duoc",
+    "avtURL": "https://png.pngtree.com/png-vector/20231215/ourmid/pngtree-3d-professional-character-cute-modeling-boy-wearing-glasses-png-image_11367353.png",
+    "createdAt": "2025-04-15T00:00:00Z",
+    "location": "Ho Chi Minh City",
+    "headline": "Love travel, love Vietnam",
+    "role": "Member",
+    "level": 12,
+    "points": 8700
+  },
+  {
+    "memberID": "user1",
+    "name": "Tran Nguyen Gia Heo",
+    "avtURL": "https://i.pravatar.cc/150?img=1",
+    "createdAt": "2025-01-01T00:00:00Z",
+    "location": "Ha Noi",
+    "headline": "Passionate about Vietnam",
+    "role": "Member",
+    "level": 15,
+    "points": 9800
+  },
+  {
+    "memberID": "002",
+    "name": "Tran Tan Tai",
+    "avtURL": "https://i.pravatar.cc/300",
+    "createdAt": "2025-03-10T00:00:00Z",
+    "location": "Ha Noi",
+    "headline": "Passionate about photography",
+    "role": "Admin",
+    "level": 10,
+    "points": 8500
+  },
+  {
+    "memberID": "003",
+    "name": "Dao Khac Dat",
+    "avtURL": "https://i.pravatar.cc/150?img=3",
+    "createdAt": "2025-05-01T00:00:00Z",
+    "location": "Da Nang",
+    "headline": "Tech enthusiast and gamer",
+    "role": "Member",
+    "level": 9,
+    "points": 7200
+  },
+  {
+    "memberID": "user5",
+    "name": "Bui Diep Duc Manh",
+    "avtURL": "https://i.pravatar.cc/150?img=5",
+    "createdAt": "2025-01-05T00:00:00Z",
+    "location": "Dong Thap",
+    "headline": "Explorer",
+    "role": "Member",
+    "level": 8,
+    "points": 6500
+  },
+  {
+    "memberID": "user6",
+    "name": "Do Quoc Huy",
+    "avtURL": "https://i.pravatar.cc/150?img=6",
+    "createdAt": "2025-01-06T00:00:00Z",
+    "location": "Ho Chi Minh",
+    "headline": "Travel enthusiast",
+    "role": "Member",
+    "level": 7,
+    "points": 5800
+  },
+  {
+    "memberID": "u7",
+    "name": "Pham Viet Hung",
+    "avtURL": "https://i.pravatar.cc/150?img=7",
+    "createdAt": "2025-01-07T00:00:00Z",
+    "location": "Bien Hoa",
+    "headline": "Nature lover",
+    "role": "Member",
+    "level": 6,
+    "points": 5200
+  }
+  
+]
