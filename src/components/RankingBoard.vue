@@ -117,7 +117,7 @@ const rankingData = ref([]);
 const loading = ref(true);
 const error = ref(null);
 // Giả lập user hiện tại
-const currentUserID = 8;
+const currentUserID = 1;
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -130,7 +130,7 @@ onMounted(async () => {
     // const token = tokenResponse.headers.get('Authorization');
 
     // Gọi API với token
-    const response = await fetch(`${API_BASE_URL}/api/users/alluser`/*, {
+    const response = await fetch(`${API_BASE_URL}api/users/alluser`/*, {
       headers: {
         'Authorization': token
       }
