@@ -28,7 +28,7 @@ export function fetchEventChallenges() {
 
 // Lấy danh sách sự kiện (dùng riêng ở trang chính)
 export function fetchEvents() {
-  return fetchData('/events');
+  return fetchData('api/events');
 }
 
 // Lấy chi tiết sự kiện theo ID
