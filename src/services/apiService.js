@@ -12,7 +12,7 @@ async function fetchData(endpoint) {
 
 // Lấy tất cả challenge
 export async function fetchChallengesByType(type) {
-  const list = await fetchData('/challenges');
+  const list = await fetchData('/api/challenges');
   return list.filter(ch => ch.type === type);
 }
 
@@ -33,7 +33,7 @@ export function fetchEvents() {
 
 // Lấy chi tiết sự kiện theo ID
 export async function fetchEventDetailById(id) {
-  const res = await fetch(`${BASE_URL}/events/${id}`);
+  const res = await fetch(`${BASE_URL}/api/events/${id}`);
   if (!res.ok) {
     throw new Error(`HTTP ${res.status}: ${res.statusText}`);
   }
