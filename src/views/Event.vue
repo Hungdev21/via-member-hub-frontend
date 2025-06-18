@@ -40,10 +40,14 @@
               {{ event.description }}
             </p>
             
-            <span class="text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
-              @click="goToDetail(event.event_id)">
-              More Details...
-            </span>
+           <span
+  class="text-red-700 dark:text-red-500 hover:underline cursor-pointer"
+  @click="goToDetail(event.event_id)"
+>
+  More Details...
+</span>
+
+
           </div>
           <hr class="border-t border-gray-300 dark:border-gray-600 my-4" />
           <Event1Card :id="event.event_id" :day="getDay(event.starts_at)" :month="getMonth(event.starts_at)"
