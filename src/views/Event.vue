@@ -9,7 +9,6 @@
         An error has occurred. Please try again later.
       </div>
 
-
       <!-- Skeleton loading -->
       <div v-else-if="loading" class="grid gap-6">
         <div v-for="n in 3" :key="n"
@@ -24,11 +23,15 @@
 
       <!-- Event list -->
       <div v-else class="flex flex-col gap-10">
-        <div v-for="event in events" :key="event.event_id"
-          class="bg-white dark:bg-gray-800 shadow-md rounded-xl transition-all duration-300 ease-in-out transform hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] hover:bg-gray-50 dark:hover:bg-gray-700 p-4 sm:p-6 space-y-6 cursor-pointer">
+        <!-- Page loading animation -->
+        <div v-if="isPageChanging" class="text-center py-10 text-gray-500 dark:text-gray-400 animate-pulse">
+          Đang tải sự kiện...
+        </div>
+
+        <div v-else v-for="event in paginatedEvents" :key="event.event_id"
+          class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 shadow-md rounded-xl transition-all duration-300 ease-in-out transform hover:shadow-lg hover:-translate-y-0.5 hover:scale-[1.01] hover:bg-gray-50 dark:hover:bg-gray-700 p-4 sm:p-6 space-y-6 cursor-pointer">
           <div class="p-4 sm:p-6">
-            
-            <img :src="event.cover_image_url" alt="Event Banner"
+            <img :src="event.cover_image_url || defaultImage" @error="onImageError" alt="Event Banner"
               class="w-full max-h-[300px] object-cover rounded-xl mb-4 cursor-pointer transition-transform duration-300 ease-in-out hover:scale-[1.01]"
               loading="lazy" @click="goToDetail(event.event_id)" />
 
@@ -36,25 +39,44 @@
               {{ event.ten_events }}
             </h2>
 
-            <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-4 cursor-pointer" @click="goToDetail(event.id)">
+            <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-4 cursor-pointer"
+              @click="goToDetail(event.event_id)">
               {{ event.description }}
             </p>
-            
-           <span
-  class="text-red-700 dark:text-red-500 hover:underline cursor-pointer"
-  @click="goToDetail(event.event_id)"
->
-  More Details...
-</span>
 
-
+            <span class="text-red-700 dark:text-red-500 hover:underline cursor-pointer"
+              @click="goToDetail(event.event_id)">
+              More Details...
+            </span>
           </div>
+
           <hr class="border-t border-gray-300 dark:border-gray-600 my-4" />
+
           <Event1Card :id="event.event_id" :day="getDay(event.starts_at)" :month="getMonth(event.starts_at)"
             :title="event.ten_events" :time="formatDateRange(event.starts_at, event.ends_at)" :price="event.price"
-            :location="event.in_person_location" :mapUrl="event.location_URL" :mapImage="event.cover_image_url"
-            :organizer="event.host" :description="event.description" :maxParticipants="event.max_attendees"
-            :currentParticipants="event.current_attendees" :status="event.status === 'upcoming' ? 'open' : 'closed'" />
+            :location="event.in_person_location" :mapUrl="event.location_URL"
+            :mapImage="event.cover_image_url || defaultImage" :organizer="event.host" :description="event.description"
+            :maxParticipants="event.max_attendees" :currentParticipants="event.current_attendees"
+            :status="event.status === 'upcoming' ? 'open' : 'closed'" />
+        </div>
+
+        <!-- Pagination controls -->
+        <div class="flex justify-center items-center gap-4 mt-8">
+          <button
+            class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+            :disabled="currentPage === 1" @click="changePage(currentPage - 1)">
+            Previous
+          </button>
+
+          <span class="font-medium">
+            Page {{ currentPage }} of {{ totalPages }}
+          </span>
+
+          <button
+            class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+            :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">
+            Next
+          </button>
         </div>
       </div>
     </div>
@@ -75,17 +97,32 @@ export default {
       events: [],
       loading: true,
       error: null,
+      currentPage: 1,
+      perPage: 2,
+      isPageChanging: false,
+      defaultImage: 'https://placehold.co/600x300?text=Coming+Soon',
     };
   },
   async created() {
     this.loading = true;
     try {
-      this.events = await fetchEvents();
+      const fetchedEvents = await fetchEvents();
+      this.events = fetchedEvents
+        .sort((a, b) => a.event_id - b.event_id);
     } catch (err) {
       this.error = true;
     } finally {
       this.loading = false;
     }
+  },
+  computed: {
+    paginatedEvents() {
+      const start = (this.currentPage - 1) * this.perPage;
+      return this.events.slice(start, start + this.perPage);
+    },
+    totalPages() {
+      return Math.ceil(this.events.length / this.perPage);
+    },
   },
   methods: {
     formatDateRange(start, end) {
@@ -100,11 +137,19 @@ export default {
     goToDetail(id) {
       this.$router.push(`/event/${id}`);
     },
+    async changePage(newPage) {
+      if (newPage < 1 || newPage > this.totalPages) return;
+      this.isPageChanging = true;
+      this.currentPage = newPage;
+      await new Promise(resolve => setTimeout(resolve, 500)); 
+      this.isPageChanging = false;
+    },
+    onImageError(e) {
+      e.target.src = this.defaultImage;
+    },
   },
 };
 </script>
-
-
 
 <style scoped>
 .line-clamp-4 {
