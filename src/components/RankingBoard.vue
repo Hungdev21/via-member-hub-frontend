@@ -205,7 +205,7 @@ const error = ref(null);
 // Giả lập user hiện tại
 const currentUserID = 1;
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 onMounted(async () => {
   try {
