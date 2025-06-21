@@ -198,6 +198,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import defaultAvatar from '../assets/VIA/avatar-default.png';
 
 const rankingData = ref([]);
 const loading = ref(true);
@@ -228,7 +229,7 @@ onMounted(async () => {
       rankingData.value = result.data.map(user => ({
         memberID: user.community_member_id,
         name: user.ten_community_members || `${user.first_name} ${user.last_name}`.trim(),
-        avtURL: user.avatar_url && user.avatar_url !== 'string' ? user.avatar_url : 'https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg',
+        avtURL: user.avatar_url && user.avatar_url !== 'string' ? user.avatar_url : defaultAvatar,
         level: parseInt(user.current_level_name.replace('Level ', '')) || 1,
         points: user.total_points,
         pointsToNextLevel: user.points_to_next_level
@@ -243,7 +244,7 @@ onMounted(async () => {
 });
 
 const handleImageError = (event) => {
-  event.target.src = 'https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg';
+  event.target.src = defaultAvatar;
 };
 
 const sortedRankingData = computed(() => {

@@ -18,11 +18,11 @@
   <!-- Nội dung chính -->
   <div
     v-else
-    class="max-w-full sm:max-w-lg lg:max-w-xl mx-auto mt-6 p-4 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center space-y-4 sm:space-y-6 bg-gradient-to-br from-white via-green-50 to-white border border-gray-200"
+    class="max-w-full sm:max-w-lg lg:max-w-xl mx-auto mt-6 p-4 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center space-y-4 sm:space-y-6 bg-gradient-to-br from-white via-red-50 to-white border border-gray-200"
   >
     <!-- Avatar -->
     <div class="flex justify-center">
-      <div class="w-20 sm:w-24 lg:w-32 h-20 sm:h-24 lg:h-32 rounded-full overflow-hidden border-4 border-green-500 shadow-md">
+      <div class="w-20 sm:w-24 lg:w-32 h-20 sm:h-24 lg:h-32 rounded-full overflow-hidden border-4 border-red-500 shadow-md">
         <img
           :src="user.avtURL"
           @error="handleImageError"
@@ -36,7 +36,7 @@
     <!-- Level -->
     <div>
       <p
-        class="inline-block px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 text-xs sm:text-sm font-semibold text-green-800 bg-green-100 rounded-full shadow-sm"
+        class="inline-block px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 text-xs sm:text-sm font-semibold text-red-800 bg-red-100 rounded-full shadow-sm"
       >
          Level: {{ user.level }}
       </p>
@@ -63,6 +63,8 @@
 </template>
 
 <script>
+import defaultAvatar from '../assets/VIA/avatar-default.png';
+
 export default {
   name: 'UserInfo',
   data() {
@@ -70,7 +72,7 @@ export default {
       user: {
         memberID: '',
         name: 'Unknown',
-        avtURL: 'https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg',
+        avtURL: defaultAvatar,
         createdAt: '',
         location: '',
         headline: 'No headline available',
@@ -90,7 +92,7 @@ export default {
       });
     },
     handleImageError(event) {
-      event.target.src = 'https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg';
+      event.target.src = defaultAvatar;
     }
   },
   async created() {
