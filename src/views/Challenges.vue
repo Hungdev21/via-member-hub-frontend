@@ -13,8 +13,7 @@
       <p v-else-if="commentError" class="text-red-500">An error has occurred. Please try again later.</p>
 
       <!-- Dữ liệu -->
-      <PostItem v-else v-for="(challenge, index) in commentChallenges" :key="challenge.id || index" :post="challenge"
-        :status="challenge.status" />
+      <Post_Challenges v-for="post in sortedPosts" :key="post.id" :post="post" :loading="isLoading" />
     </div>
 
     <h3 class="text-lg font-semibold mb-4 text-gray-700">Join exciting events to gain experience</h3>
@@ -39,13 +38,17 @@
 
 <script>
 import { defineAsyncComponent } from 'vue';
-import { fetchCommentChallenges, fetchEventChallenges } from '../services/apiService';
+import {
+  fetchJoinedCommentChallenges,
+  fetchEventChallenges
+} from '../services/apiService';
 
 export default {
   name: 'Challenges',
   components: {
     PostItem: defineAsyncComponent(() => import('../components/Post_Challenge.vue')),
     EventItem: defineAsyncComponent(() => import('../components/Event_Challenge.vue')),
+    Post_Challenges: defineAsyncComponent(() => import('../components/Post_Challenge.vue'))
   },
   data() {
     return {
@@ -54,8 +57,18 @@ export default {
       isLoadingComments: true,
       isLoadingEvents: true,
       commentError: null,
-      eventError: null,
+      eventError: null
     };
+  },
+  computed: {
+    sortedPosts() {
+      return [...this.commentChallenges].sort((a, b) => {
+        const aCommented = a.user_challenges?.[0]?.commented ?? false;
+        const bCommented = b.user_challenges?.[0]?.commented ?? false;
+        if (aCommented === bCommented) return 0;
+        return aCommented ? 1 : -1;
+      });
+    }
   },
   created() {
     this.loadAllChallenges();
@@ -65,23 +78,39 @@ export default {
       this.isLoadingComments = true;
       this.isLoadingEvents = true;
       try {
+        const memberId = 1; // giả định
         const [commentRes, eventResRaw] = await Promise.all([
-          fetchCommentChallenges(),
+          fetchJoinedCommentChallenges(memberId),
           fetchEventChallenges()
         ]);
 
         const mappedComments = commentRes
-          .map(this.mapCommentToPost)
-          .filter(c => c.status !== 'hidden')
-          .sort((a, b) => (a.joined === b.joined ? 0 : a.joined ? 1 : -1)); // chưa tham gia lên trước
+          .filter(item => item.type === 'comment' && item.post?.status === 'published')
+          .map(this.mapCommentToPost);
 
         const mappedEvents = eventResRaw
           .map(this.mapEventChallenge)
           .filter(e => e.status !== 'cancelled')
-          .sort((a, b) => (a.joined === b.joined ? 0 : a.joined ? 1 : -1)); // chưa tham gia lên trước
+          .sort((a, b) => (a.joined === b.joined ? 0 : a.joined ? 1 : -1));
 
         this.commentChallenges = mappedComments;
         this.eventChallenges = mappedEvents;
+
+        // ✅ Gắn trạng thái comment đã hoàn thành từ localStorage
+        const commentedKey = 'commentedChallenges';
+        const commentedList = JSON.parse(localStorage.getItem(commentedKey) || '[]');
+
+        this.commentChallenges.forEach(item => {
+          if (commentedList.includes(item.id)) {
+            if (!item.user_challenges || !item.user_challenges.length) {
+              item.user_challenges = [{ joined: true, commented: true }];
+            } else {
+              item.user_challenges[0].joined = true;
+              item.user_challenges[0].commented = true;
+            }
+          }
+        });
+
       } catch (err) {
         this.commentError = true;
         this.eventError = true;
@@ -93,43 +122,24 @@ export default {
 
     mapCommentToPost(challenge) {
       const post = challenge.post;
-      const hasCommented = post.comments_count > 0;
-
-      let status = 'not_joined';
-      switch (challenge.status) {
-        case 'published':
-          status = hasCommented ? 'joined' : 'not_joined';
-          break;
-        case 'pending_review':
-          status = 'review';
-          break;
-        case 'archived':
-        case 'draft':
-          status = 'hidden';
-          break;
-        default:
-          status = 'not_joined';
-      }
-
       return {
         id: challenge.post_challenge_id,
-        title: post.ten_posts || `Comment Challenge #${challenge.post_challenge_id}`,
-        author: post.user_name || 'Unknown',
+        title: post?.ten_posts || `Challenge #${challenge.post_challenge_id}`,
+        excerpt: post?.body?.replace(/<[^>]+>/g, '').slice(0, 120) || '',
         reward: {
           type: 'points',
           value: challenge.points_reward,
-          highlight: hasCommented
+          highlight: challenge.user_challenges?.[0]?.commented || false
         },
-        createdAt: post.created_at,
-        joined: hasCommented,
+        createdAt: challenge.created_at,
+        status: post?.status || 'draft',
+        dueDate: challenge.due_date,
+        user_challenges: challenge.user_challenges || [],
         requiresComment: true,
-        commented: hasCommented,
-        url: post.url,
-        avatar: post.user_avatar_url,
-        tags: post.tags || [],
-        excerpt: post.body?.replace(/<[^>]*>/g, '').slice(0, 150) || '',
-        status,
-        dueDate: challenge.due_date
+        type: 'comment',
+        thumbnail: post?.thumbnail || '',
+        post_id: post?.post_id,
+        slug: post?.slug
       };
     },
 
@@ -139,20 +149,11 @@ export default {
 
       let status = 'not_joined';
       switch (challenge.status) {
-        case 'upcoming':
-          status = joined ? 'joined' : 'not_joined';
-          break;
-        case 'ongoing':
-          status = 'joined';
-          break;
-        case 'finished':
-          status = 'expired';
-          break;
-        case 'cancelled':
-          status = 'cancelled';
-          break;
-        default:
-          status = 'not_joined';
+        case 'upcoming': status = joined ? 'joined' : 'not_joined'; break;
+        case 'ongoing': status = 'joined'; break;
+        case 'finished': status = 'expired'; break;
+        case 'cancelled': status = 'cancelled'; break;
+        default: status = 'not_joined';
       }
 
       return {
